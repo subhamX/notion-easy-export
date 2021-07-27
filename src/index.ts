@@ -1,5 +1,5 @@
 import { load } from "cheerio";
-import {readFileSync, readdirSync, lstatSync, writeFile} from 'fs-extra';
+import {readFileSync, readdirSync, writeFileSync} from 'fs-extra';
 import path from "path";
 import devLogger from "./logger/devLogger";
 import { exportToEBook } from "./utils/convertHtml";
@@ -51,7 +51,7 @@ async function main() {
     let fileContent = $.root().html() as string;
 
     devLogger.info(`Saving the output file as HTML at tmp location [${tmpOutputHtmlFilePath}]`)
-    writeFile(tmpOutputHtmlFilePath, fileContent);
+    writeFileSync(tmpOutputHtmlFilePath, fileContent);
     devLogger.info(`Exporting the HTML To Ebook`)
     exportToEBook();
     devLogger.info(`Operation Successful. Exiting.`)
