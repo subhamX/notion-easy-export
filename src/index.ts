@@ -1,17 +1,18 @@
 import { load } from "cheerio";
-import fs from 'fs-extra';
+import {readFileSync, readdirSync, lstatSync, writeFile} from 'fs-extra';
 import path from "path";
 import devLogger from "./logger/devLogger";
+import { exportToEBook } from "./utils/convertHtml";
+import {  baseHtmlFilePath, cssFilesArray, inputFileDirPath, outputFileDirPath, tmpOutputHtmlFilePath } from "./utils/config";
+import { createDirs } from "./utils/createDirs";
 
-
-const inputFileDirPath = path.join(".", "data");
-const outputFileDirPath = path.join(".", "output"); // if dir not present it will be created
-const assetsDirPath = path.join(".", "assets"); 
 
 async function main() {
     devLogger.info("Starting operation");
+    devLogger.info("Creating Output Dir if it's not present");
+    createDirs();
 
-    let files = fs.readdirSync(inputFileDirPath);
+    let files = readdirSync(inputFileDirPath);
     // ! DEBUG
     files = files.slice(0, 5);
     devLogger.debug("Slicing the files array to 5")
@@ -19,18 +20,19 @@ async function main() {
     let numberOfFiles = files.length;
     devLogger.info(`Files array size: ${numberOfFiles}`);
 
-    let baseHtmlContent=fs.readFileSync(path.join(assetsDirPath,'base.html'));
+    let baseHtmlContent = readFileSync(baseHtmlFilePath);
     let $ = load(baseHtmlContent);
 
     for (let i = 0; i < numberOfFiles; i++) {
         let file = files[i];
+        
         devLogger.info(`Processing file: ${file}`);
-        let fileContent = fs.readFileSync(path.join(inputFileDirPath, file), { encoding: 'utf-8' });
+        let fileContent = readFileSync(path.join(inputFileDirPath, file), { encoding: 'utf-8' });
         let currHtml = load(fileContent);
 
         currHtml.root().find('body').each((i, item) => {
             item.tagName = 'section';
-            item.attribs={
+            item.attribs = {
                 ...item.attribs,
                 "class": "prime-chapter-instance",
                 "style": "page-break-after:always"
@@ -41,14 +43,22 @@ async function main() {
         $('body').append(currHtml('.prime-chapter-instance'));
     }
 
-    let finalContent=$.root().html() as string;
+    cssFilesArray.forEach(e => {
+        // Path is absolute so no '..' etc needed
+        $('head').append(`<link rel="stylesheet" href="${e}" />`)
+    })
 
-    fs.mkdirSync(outputFileDirPath, {recursive: true});
-    fs.writeFileSync(path.join(outputFileDirPath, "index-merged.html"), finalContent);
+    let fileContent = $.root().html() as string;
 
-    // copy assets folder
-    fs.copySync(path.join(assetsDirPath, "css"), path.join(outputFileDirPath, "css"));
+    devLogger.info(`Saving the output file as HTML at tmp location [${tmpOutputHtmlFilePath}]`)
+    writeFile(tmpOutputHtmlFilePath, fileContent);
+    devLogger.info(`Exporting the HTML To Ebook`)
+    exportToEBook();
+    devLogger.info(`Operation Successful. Exiting.`)
 }
 
+
+
+// TODO: Take the title and other metadata
 main();
 

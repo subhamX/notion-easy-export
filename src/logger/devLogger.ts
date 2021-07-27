@@ -3,7 +3,7 @@ import { createLogger, format, transports } from "winston";;
 
 
 const devLogger = createLogger({
-    level: 'info',
+    level: 'debug',
     format: format.json(),
     transports: [
         new transports.Console({format: format.simple()}),
@@ -13,3 +13,4 @@ const devLogger = createLogger({
 });
 
 export default devLogger;
+
