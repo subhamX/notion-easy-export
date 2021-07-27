@@ -1,10 +1,11 @@
 import { load } from "cheerio";
-import {readFileSync, readdirSync, writeFileSync} from 'fs-extra';
+import {readFileSync, readdirSync, writeFileSync, lstatSync, copySync} from 'fs-extra';
 import path from "path";
 import devLogger from "./logger/devLogger";
 import { exportToEBook } from "./utils/convertHtml";
 import {  baseHtmlFilePath, cssFilesArray, inputFileDirPath, outputFileDirPath, tmpOutputHtmlFilePath } from "./utils/config";
 import { createDirs } from "./utils/createDirs";
+import { isFileSystemPath } from "./utils/isFileSystemPath";
 
 
 async function main() {
@@ -14,8 +15,8 @@ async function main() {
 
     let files = readdirSync(inputFileDirPath);
     // ! DEBUG
-    files = files.slice(0, 5);
-    devLogger.debug("Slicing the files array to 5")
+    // files = files.slice(0, 2);
+    // devLogger.debug("Slicing the files array to 5")
 
     let numberOfFiles = files.length;
     devLogger.info(`Files array size: ${numberOfFiles}`);
@@ -25,9 +26,16 @@ async function main() {
 
     for (let i = 0; i < numberOfFiles; i++) {
         let file = files[i];
-        
+        let filePath=path.join(inputFileDirPath, file);
+        if(lstatSync(filePath).isDirectory()){
+            // TODO: We need to move these assets
+            devLogger.info(`Copying [${filePath}]`)
+            let outputFilePath=path.join(outputFileDirPath, file);
+            copySync(filePath, outputFilePath, {recursive: true});
+            continue;
+        }
         devLogger.info(`Processing file: ${file}`);
-        let fileContent = readFileSync(path.join(inputFileDirPath, file), { encoding: 'utf-8' });
+        let fileContent = readFileSync(filePath, { encoding: 'utf-8' });
         let currHtml = load(fileContent);
 
         currHtml.root().find('body').each((i, item) => {
@@ -39,9 +47,18 @@ async function main() {
             }
         })
 
+        currHtml('section').find('img').each((i, item) => {
+            let src=item.attribs.src;
+            if(isFileSystemPath(src)){
+                devLogger.info(`Updating img 'src' attribute [${src}]`);
+                item.attribs.src=path.join(outputFileDirPath, src)
+            }
+        })
 
         $('body').append(currHtml('.prime-chapter-instance'));
     }
+
+
 
     cssFilesArray.forEach(e => {
         // Path is absolute so no '..' etc needed
@@ -58,7 +75,5 @@ async function main() {
 }
 
 
-
-// TODO: Take the title and other metadata
 main();
 
