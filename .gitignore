@@ -3,3 +3,5 @@ dist/
 combined.log
 error.log
 output/
+session_files/
+.env
