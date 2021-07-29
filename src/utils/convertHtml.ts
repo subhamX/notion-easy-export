@@ -38,20 +38,3 @@ export function exportToEBook() {
     }
 }
 
-// function exportToEBook(finalContent: string) {
-//     try {
-//         wkhtmltopdf(finalContent, {
-//             enableLocalFileAccess: true,
-//             marginBottom: '10',
-//             marginTop: '10',
-//             headerSpacing: 5,
-//             // toc: ` asah`,
-//             headerHtml: htmlToEBookConfig.headerHtmlPath,
-//             // xslStyleSheet: htmlToEBookConfig.xslStyleSheetPath,
-//             cover: htmlToEBookConfig.coverHtmlPath,
-//             output: htmlToEBookConfig.outputEBookFilePath,
-//         });
-//     } catch (err) {
-//         devLogger.error(err);
-//     }
-// }

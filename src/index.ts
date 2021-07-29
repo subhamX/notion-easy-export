@@ -27,6 +27,9 @@ async function main() {
     for (let i = 0; i < numberOfFiles; i++) {
         let file = files[i];
         let filePath=path.join(inputFileDirPath, file);
+        if(file==='.gitignore'){
+            continue;
+        }
         if(lstatSync(filePath).isDirectory()){
             // TODO: We need to move these assets
             devLogger.info(`Copying [${filePath}]`)
