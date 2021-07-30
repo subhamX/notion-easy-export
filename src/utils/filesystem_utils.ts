@@ -1,6 +1,6 @@
 import { mkdirSync, readdirSync, rmSync } from "fs-extra"
 import devLogger from "../logger/dev_logger";
-import { inputFileDirPath, outputFileDirPath, sessionFilesDir, tmpDirPath } from "./config";
+import { finalMergedDocOutputPath, inputFileDirPath, sessionFilesDir, tmpDirPath } from "./config";
 import extract from 'extract-zip';
 import path from "path";
 
@@ -13,7 +13,7 @@ export const buildSessionDirs=() => {
     });
     
     devLogger.info("Creating directories in session Files Dir!!!");
-    let dirs=[outputFileDirPath, inputFileDirPath, tmpDirPath];
+    let dirs=[path.dirname(finalMergedDocOutputPath), inputFileDirPath, tmpDirPath];
     dirs.forEach(e => {
         mkdirSync(e, {recursive: true});
     })

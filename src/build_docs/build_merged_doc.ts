@@ -3,9 +3,10 @@ import { readFileSync, readdirSync, writeFileSync, lstatSync, copySync, existsSy
 import path from "path";
 import devLogger from "../logger/dev_logger";
 import { exportToEBook } from "../utils/convert_html_to_ebook";
-import { baseHtmlFilePath, cssFilesArray, inputFileDirPath, outputFileDirPath, rootDir, tmpOutputHtmlFilePath } from "../utils/config";
-import { getHtmlExport } from "../notion_export/html_export";
-import { buildSessionDirs, isFileSystemPath } from "../utils/filesystem_utils";
+import { baseHtmlFilePath, cssFilesArray, finalMergedDocOutputPath, inputFileDirPath, outputFileDirPath, rootDir, tmpOutputHtmlFilePath } from "../utils/config";
+import { isFileSystemPath } from "../utils/filesystem_utils";
+import { buildCurrentSession } from "../utils/build_current_session";
+import { processHtml } from "../utils/process_html";
 
 /**
  * Builds a single merged doc using all of the documents
@@ -13,23 +14,12 @@ import { buildSessionDirs, isFileSystemPath } from "../utils/filesystem_utils";
  */
 export async function buildMergedDoc(token_v2: string, pageId: string) {
     try {
-        devLogger.info("Starting operation");
 
-        if (pageId.length == 32) {
-            // add dashes
-            pageId = `${pageId.substr(0, 8)}-${pageId.substr(8, 4)}-${pageId.substr(12, 4)}-${pageId.substr(16, 4)}-${pageId.substr(20)}`;
-        } else if (pageId.length !== 36) {
-            throw Error(`pageId size ${pageId.length} isn't valid`);
-        }
-
-        buildSessionDirs();
-        await getHtmlExport(token_v2, pageId);
+        await buildCurrentSession(token_v2, pageId);
 
         let baseHtmlContent = readFileSync(baseHtmlFilePath);
         let $ = load(baseHtmlContent);
-        traverseAndBuild("/", $);
-
-        // return;
+        traverseAndBuildMerged("/", $);
 
         cssFilesArray.forEach(e => {
             // Path is absolute so no '..' etc needed
@@ -39,10 +29,10 @@ export async function buildMergedDoc(token_v2: string, pageId: string) {
 
         let fileContent = $.root().html() as string;
 
-        devLogger.info(`Saving the output file as HTML at tmp location [${tmpOutputHtmlFilePath}]`)
+        devLogger.info(`Saving the output file as HTML at tmp location`)
         writeFileSync(tmpOutputHtmlFilePath, fileContent);
         devLogger.info(`Exporting the HTML To Ebook`)
-        exportToEBook();
+        exportToEBook(finalMergedDocOutputPath);
 
         devLogger.info(`Operation Successful. Exiting.`)
     } catch (err) {
@@ -54,10 +44,9 @@ export async function buildMergedDoc(token_v2: string, pageId: string) {
 
 
 // path needs to be relative to inputFilePath
-const traverseAndBuild = (currRelDirPath: string, $: CheerioAPI) => {
-    const currDirPath = path.join(inputFileDirPath, currRelDirPath);
-
+const traverseAndBuildMerged = (currRelDirPath: string, $: CheerioAPI) => {
     // we are sure that it needs to be directory to reach here
+    const currDirPath = path.join(inputFileDirPath, currRelDirPath);
 
     let files = readdirSync(currDirPath, {
         withFileTypes: true,
@@ -65,9 +54,6 @@ const traverseAndBuild = (currRelDirPath: string, $: CheerioAPI) => {
     // ! DEBUG
     // files = files.slice(0, 2);
     // devLogger.debug("Slicing the files array to 5")
-
-    let numberOfFiles = files.length;
-    devLogger.info(`Files array size: ${numberOfFiles}`);
 
     let nonLeafNodesInCurrentDir: string[] = []; // store the dir names only. (We know that .html ext version also exists)
 
@@ -124,32 +110,8 @@ const traverseAndBuild = (currRelDirPath: string, $: CheerioAPI) => {
                 let currHtml = processHtml(`${filePath}.html`, currRelDirPath);
                 $('body').append(currHtml('.prime-chapter-instance'));
                 // console.log("Recursive Call to directory:::: ", file.name)
-                traverseAndBuild(path.join(currRelDirPath, file.name), $);
+                traverseAndBuildMerged(path.join(currRelDirPath, file.name), $);
             }
         }
     }
-}
-
-const processHtml = (filePath: string, currRelPath: string) => {
-    let fileContent = readFileSync(filePath, { encoding: 'utf-8' });
-    let currHtml = load(fileContent);
-
-    currHtml.root().find('body').each((i, item) => {
-        item.tagName = 'section';
-        item.attribs = {
-            ...item.attribs,
-            "class": "prime-chapter-instance",
-            "style": "page-break-after:always"
-        }
-    })
-
-    currHtml('section').find('img').each((i, item) => {
-        let src = item.attribs.src;
-        if (isFileSystemPath(src)) {
-            let tmp=path.join('..', 'input', currRelPath, src);
-            devLogger.info(`Updating img 'src' attribute [${src}]`);
-            item.attribs.src = tmp;
-        }
-    })
-    return currHtml;
 }

@@ -13,7 +13,8 @@ export const assetsDirPath = path.join(rootDir, "assets");
 
 export const baseHtmlFilePath=path.join(assetsDirPath, 'base.html');
 export const tmpOutputHtmlFilePath=path.join(tmpDirPath, 'tmp.html');
-export const finalEBookOutputPath=path.join(outputFileDirPath, 'prime_book.pdf');
+export const finalMergedDocOutputPath=path.join(outputFileDirPath, "merged", 'prime_book.pdf');
+export const finalStandaloneDocsBaseDirOutputPath=path.join(outputFileDirPath, "standalone");
 
 
 
