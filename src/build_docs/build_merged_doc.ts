@@ -1,10 +1,9 @@
 import { CheerioAPI, load } from "cheerio";
-import { readFileSync, readdirSync, writeFileSync, lstatSync, copySync, existsSync } from 'fs-extra';
+import { readFileSync, readdirSync, writeFileSync, existsSync } from 'fs-extra';
 import path from "path";
 import devLogger from "../logger/dev_logger";
 import { exportToEBook } from "../utils/convert_html_to_ebook";
 import { baseHtmlFilePath, cssFilesArray, finalMergedDocOutputPath, inputFileDirPath, outputFileDirPath, rootDir, tmpOutputHtmlFilePath } from "../utils/config";
-import { isFileSystemPath } from "../utils/filesystem_utils";
 import { buildCurrentSession } from "../utils/build_current_session";
 import { processHtml } from "../utils/process_html";
 
@@ -32,7 +31,7 @@ export async function buildMergedDoc(token_v2: string, pageId: string) {
         devLogger.info(`Saving the output file as HTML at tmp location`)
         writeFileSync(tmpOutputHtmlFilePath, fileContent);
         devLogger.info(`Exporting the HTML To Ebook`)
-        exportToEBook(finalMergedDocOutputPath);
+        exportToEBook(finalMergedDocOutputPath, {});
 
         devLogger.info(`Operation Successful. Exiting.`)
     } catch (err) {

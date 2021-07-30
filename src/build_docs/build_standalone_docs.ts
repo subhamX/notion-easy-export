@@ -3,7 +3,7 @@ import { mkdirSync } from "fs-extra";
 import path from "path";
 import devLogger from "../logger/dev_logger";
 import { buildCurrentSession } from "../utils/build_current_session";
-import { finalStandaloneDocsBaseDirOutputPath, inputFileDirPath, tmpOutputHtmlFilePath } from "../utils/config";
+import { cssFilesArray, finalStandaloneDocsBaseDirOutputPath, inputFileDirPath, tmpOutputHtmlFilePath } from "../utils/config";
 import { exportToEBook } from "../utils/convert_html_to_ebook";
 import { processHtml } from "../utils/process_html";
 
@@ -42,6 +42,12 @@ const traverseBuildAndExportStandalone = (currRelDirPath: string) => {
             if (extention == 'html') {
                 // process it
                 let currHtml = processHtml(filePath, currRelDirPath);
+
+                cssFilesArray.forEach(e => {
+                    // Path is absolute so no '..' etc needed
+                    currHtml('head').append(`<link rel="stylesheet" href="${e}" />`)
+                })
+
                 let fileContent = currHtml.root().html() as string;
 
                 devLogger.info(`Saving the output file as HTML at tmp location`)
@@ -52,7 +58,9 @@ const traverseBuildAndExportStandalone = (currRelDirPath: string) => {
                 mkdirSync(path.dirname(currFileOutputDir), {
                     recursive: true
                 })
-                exportToEBook(currFileOutputDir);
+                exportToEBook(currFileOutputDir, {
+                    includeCover: false,
+                });
             }
         }
 
