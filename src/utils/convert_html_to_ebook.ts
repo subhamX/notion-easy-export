@@ -1,9 +1,9 @@
 import { execFileSync } from "child_process";
 import path from "path"
 import devLogger from "../logger/dev_logger";
-import { htmlToEBookConfig, tmpOutputHtmlFilePath } from "./config";
+import { htmlToEBookConfig, packageRootDir, tmpOutputHtmlFilePath } from "./config";
 
-const pathToWkhtmltopdfBinaryDir = path.join(process.cwd(), 'bin', 'wkhtmltopdf')
+const pathToWkhtmltopdfBinaryDir = path.join(packageRootDir, 'bin', 'wkhtmltopdf')
 
 let wkhtmltopdf = path.join(pathToWkhtmltopdfBinaryDir, 'wkhtmltopdf')
 

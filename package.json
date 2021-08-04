@@ -1,18 +1,24 @@
 {
   "name": "@subhamx/notion-to-ebook",
-  "version": "1.0.0-beta",
+  "version": "1.0.0",
   "description": "Notion to ebook is a lightweight library to convert notion document consisting of multiple nested documents or databases into an ebook format like PDFs, with the table of contents, page cover, headers etc.",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "watch": "tsc -w",
     "build": "tsc -b",
-    "test": "node dist/tests/index.js"
+    "test": "node lib/tests/index.js"
   },
   "keywords": [
     "notion to ebook",
+    "notion",
     "notion to pdf",
     "bulk export",
-    "merge pdf"
+    "notion api",
+    "merge pdf",
+    "pdf",
+    "book",
+    "kindle"
   ],
   "author": "subhamx",
   "license": "Apache-2.0",

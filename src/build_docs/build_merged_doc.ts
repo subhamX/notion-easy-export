@@ -3,7 +3,7 @@ import { readFileSync, readdirSync, writeFileSync, existsSync } from 'fs-extra';
 import path from "path";
 import devLogger from "../logger/dev_logger";
 import { exportToEBook } from "../utils/convert_html_to_ebook";
-import { baseHtmlFilePath, cssFilesArray, finalMergedDocOutputPath, inputFileDirPath, outputFileDirPath, rootDir, tmpOutputHtmlFilePath } from "../utils/config";
+import { baseHtmlFilePath, cssFilesArray, finalMergedDocOutputPath, inputFileDirPath, tmpOutputHtmlFilePath } from "../utils/config";
 import { buildCurrentSession } from "../utils/build_current_session";
 import { processHtml } from "../utils/process_html";
 

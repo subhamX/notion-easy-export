@@ -1,9 +1,10 @@
 _docs/
 node_modules/
-dist/
 combined.log
 error.log
 output/
 session_files/
 .env
 package-lock.json
+src/
+tsconfig.json

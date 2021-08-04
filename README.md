@@ -4,7 +4,7 @@
   <a
     href="https://github.com/subhamx/notion-to-ebook/blob/master/LICENSE"
     style="margin-right: 1em;">
-    <img alt="MIT license" src="https://img.shields.io/github/license/subhamx/notion-to-ebook?color=brightgreen"/>
+    <img alt="Apache-2.0" src="https://img.shields.io/github/license/subhamx/notion-to-ebook?color=blue"/>
   </a>
   <a
     href="https://www.npmjs.com/package/@subhamx/notion-to-ebook"
