@@ -30,7 +30,7 @@ There are two modes to use this application:
 
 2. **Merge mode:** It allows users to generate a single PDF for the entire export. It concatenates each of the notion pages smartly to generate a single document. Table of contents of the whole document is also included at the beginning to ease browsing across the different sections of the merged PDF. You can find the exported standalone files inside **session_files/output/standalone**.
 
-> Please note that in merge mode all documents not linking to any other document at the current level are placed before the documents linking to other ones.
+> 💡 **Document Arranging Logic:** In merge mode all documents not linking to any other document at the current level are placed before the documents linking to other ones in alphabetical order.
 
 
 ## Installation
@@ -60,7 +60,15 @@ const pageId= "NOTION_PAGE_ID";
 buildMergedDoc(token_v2, pageId);
 ```
 
-**Note:** Whenever you call any of the instances of buildStandaloneDocs or buildMergedDoc. It removes all files inside the session_files. So please be cautious before starting the script.
+> ⚠️ **Caution:** Whenever you call any of the instances of buildStandaloneDocs or buildMergedDoc. It removes all files inside the session_files. So please be cautious before starting the script.
+
+### Details on Notion TOKEN_V2
+Please note that **TOKEN_V2** used in the application is different from Notion's official API **Internal Integration Token**. 
+
+**Follow these steps to get the token_v2.**
+
+1. Open the browser inspector tools and go to **Application** Tab. 
+2. Then look for the **cookies** section, and use the value corresponding to the key **token_v2** to authenticate to Notion Server. 
 
 
 
