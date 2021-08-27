@@ -26,9 +26,9 @@ Notion to Ebook is a lightweight library written in Typescript to convert any no
 This application requires Zero Configuration. The current implementation does most things like arranging all the files as chapters and generating the Table of Contents, cover page, footer, etc. 
 
 There are two modes to use this application:
-1. **Standalone mode:** It allows users to generate a separate PDF for each of the HTML pages.  For example, if your notion exports have a total of 12 pages (including all nested docs, tables etc.), then there will be precisely 12 PDFs generated for each one of them. You can find the exported merged file inside **session_files/output/merged**.
+1. **Standalone mode:** It allows users to generate a separate PDF for each of the HTML pages.  For example, if your notion exports have a total of 12 pages (including all nested docs, tables etc.), then there will be precisely 12 PDFs generated for each one of them. You can find the exported merged file inside **session_files/output/standalone**.
 
-2. **Merge mode:** It allows users to generate a single PDF for the entire export. It concatenates each of the notion pages smartly to generate a single document. Table of contents of the whole document is also included at the beginning to ease browsing across the different sections of the merged PDF. You can find the exported standalone files inside **session_files/output/standalone**.
+2. **Merge mode:** It allows users to generate a single PDF for the entire export. It concatenates each of the notion pages smartly to generate a single document. Table of contents of the whole document is also included at the beginning to ease browsing across the different sections of the merged PDF. You can find the exported standalone files inside **session_files/output/merged**.
 
 > 💡 **Document Arranging Logic:** In merge mode all documents not linking to any other document at the current level are placed before the documents linking to other ones in alphabetical order.
 
