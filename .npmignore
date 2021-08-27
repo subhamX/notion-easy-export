@@ -8,3 +8,4 @@ session_files/
 package-lock.json
 src/
 tsconfig.json
+.github/
