@@ -1,42 +1,64 @@
 <!DOCTYPE html>
-<html><head><script>
-function subst() {
-    var vars = {};
-    var query_strings_from_url = document.location.search.substring(1).split('&');
-    for (var query_string in query_strings_from_url) {
-        if (query_strings_from_url.hasOwnProperty(query_string)) {
-            var temp_var = query_strings_from_url[query_string].split('=', 2);
-            vars[temp_var[0]] = decodeURI(temp_var[1]);
-        }
-    }
-    var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages'];
-    for (var css_class in css_selector_classes) {
-        if (css_selector_classes.hasOwnProperty(css_class)) {
-            var element = document.getElementsByClassName(css_selector_classes[css_class]);
-            for (var j = 0; j < element.length; ++j) {
-                element[j].textContent = vars[css_selector_classes[css_class]];
-            }
-        }
-    }
-}
-</script></head>
-<style>
-    @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-    * {
-        font-family: 'Poppins';
-        margin: 0;
-        padding: 0;
-        font-size: 12px;
-    }
-</style>
+<html>
+	<head>
+		<script>
+			function subst() {
+				var vars = {};
+				var query_strings_from_url = document.location.search
+					.substring(1)
+					.split("&");
+				for (var query_string in query_strings_from_url) {
+					if (query_strings_from_url.hasOwnProperty(query_string)) {
+						var temp_var = query_strings_from_url[query_string].split("=", 2);
+						vars[temp_var[0]] = decodeURI(temp_var[1]);
+					}
+				}
+				var css_selector_classes = [
+					"page",
+					"frompage",
+					"topage",
+					"webpage",
+					"section",
+					"subsection",
+					"date",
+					"isodate",
+					"time",
+					"title",
+					"doctitle",
+					"sitepage",
+					"sitepages",
+				];
+				for (var css_class in css_selector_classes) {
+					if (css_selector_classes.hasOwnProperty(css_class)) {
+						var element = document.getElementsByClassName(
+							css_selector_classes[css_class]
+						);
+						for (var j = 0; j < element.length; ++j) {
+							element[j].textContent = vars[css_selector_classes[css_class]];
+						}
+					}
+				}
+			}
+		</script>
+	</head>
+	<style>
+		@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+		* {
+			font-family: "Poppins";
+			margin: 0;
+			padding: 0;
+			font-size: 12px;
+		}
+	</style>
 
-<body style="border:0; margin: 0;" onload="subst()">
-<table style="border-bottom: 1px solid #B2B1B9; width: 100%;">
-  <tr>
-    <td class="section"></td>
-    <td style="text-align:right">
-      Page <span class="page"></span> of <span class="topage"></span>
-    </td>
-  </tr>
-</table>
-</body></html>
+	<body style="border: 0; margin: 0" onload="subst()">
+		<table style="border-bottom: 1px solid #b2b1b9; width: 100%">
+			<tr>
+				<td class="section"></td>
+				<td style="text-align: right">
+					Page <span class="page"></span> of <span class="topage"></span>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

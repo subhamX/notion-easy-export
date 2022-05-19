@@ -6,3 +6,4 @@ output/
 session_files/
 .env
 package-lock.json
+e2e-test/
