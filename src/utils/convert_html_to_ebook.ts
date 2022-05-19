@@ -1,5 +1,4 @@
 import { execFileSync } from "child_process";
-import path from "path";
 import devLogger from "../logger/dev_logger";
 import {
 	htmlToEBookConfig,
@@ -7,13 +6,7 @@ import {
 	tmpOutputHtmlFilePath,
 } from "./config";
 
-const pathToWkhtmltopdfBinaryDir = path.join(
-	packageRootDir,
-	"bin",
-	"wkhtmltopdf"
-);
-
-let wkhtmltopdf = path.join(pathToWkhtmltopdfBinaryDir, "wkhtmltopdf");
+const wkhtmltopdf = 'wkhtmltopdf';
 
 export interface exportToEbookArgs {
 	marginBottom?: number;
