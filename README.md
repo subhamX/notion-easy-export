@@ -39,6 +39,22 @@ There are two modes to use this application:
 npm install @subhamx/notion-to-ebook
 ```
 
+### [Required] Installing wkhtmltopdf
+
+The following application uses `wkhtmltopdf` to generate PDFs. Kindly follow these steps to get `wkhtmltopdf` installed and added to `PATH`.
+
+> ⚠️ Packages provided by your distribution might be easier to install but they may not be using a patched Qt and have missing features. So use it at your own discretion.
+
+1. First of all, install the `wkhtmltopdf` by downloading the installer from [here](https://wkhtmltopdf.org/downloads.html#stable).
+2. Now we need to add `wkhtmltopdf` to PATH. You might or might not need to perform this step, as the installer automatically performs this step for some distributions. (FYI, macOS installer automatically adds to PATH. Another advantage of using a mac? 🤔).
+3. Confirm that `wkhtmltopdf` is successfully added to PATH by opening `terminal/command prompt/powershell` and executing the following command:
+
+```bash
+wkhtmltopdf --version
+```
+
+> Note: On macOS, while trying to install wkhtmltopdf you will be prompted with **macOS cannot verify that this app is free from malware**. Kindly follow the steps mentioned [here](https://news.trendmicro.com/2021/12/16/how-to-fix-macos-cannot-verify-that-this-app-is-free-from-malware-error/) to fix it.
+
 ## API
 
 The usage is pretty straightforward.
