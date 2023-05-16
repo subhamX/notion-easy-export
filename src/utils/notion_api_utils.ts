@@ -30,14 +30,28 @@ export const getSpaceId = async (token_v2: string, blockId: string) => {
 		}),
 		method: "POST",
 	});
-	const json = await res.json();
-
-	return json['spaceId'];
+	const { spaceId } = await res.json();
+	devLogger.info(`spaceId: ${spaceId}`)
+	return spaceId;
 };
 
-export const enqueueExportTask = async (token_v2: string, blockId: string) => {
-	const spaceId=await getSpaceId(token_v2, blockId)
 
+export const getFileToken = async (token_v2: string, spaceId: string) => {
+	const res = await fetch("https://www.notion.so/api/v3/getAIUsageEligibility", {
+		"headers": {
+			"content-type": "application/json",
+			cookie: `token_v2=${token_v2};`,
+		},
+		"body": JSON.stringify({
+			spaceId
+		}),
+		"method": "POST",
+	});
+	const fileToken=res.headers.get('set-cookie')?.split(', ').filter(e => e.includes('file_token='))[0].split('; ')[0].split('=')[1]
+	return fileToken as string;
+}
+
+export const enqueueExportTask = async (token_v2: string, blockId: string, spaceId: string) => {
 	const res = await fetch("https://www.notion.so/api/v3/enqueueTask", {
 		headers: {
 			"content-type": "application/json",
@@ -48,7 +62,7 @@ export const enqueueExportTask = async (token_v2: string, blockId: string) => {
 				eventName: "exportBlock",
 				request: {
 					block: {
-						blockId,
+						id: blockId,
 						spaceId,
 					},
 					recursive: true,
@@ -69,10 +83,15 @@ export const enqueueExportTask = async (token_v2: string, blockId: string) => {
 
 export const downloadFileFromUrl = async (
 	downloadZipFilePath: string,
-	exportUrl: string
+	exportUrl: string,
+	fileToken: string
 ) => {
 	devLogger.info("Starting file download");
-	let res = await fetch(exportUrl);
+	let res = await fetch(exportUrl, {
+		headers: {
+			cookie: `file_token=${fileToken}`
+		}
+	});
 	const fileStream = createWriteStream(downloadZipFilePath);
 	await new Promise((resolve, reject) => {
 		res.body.pipe(fileStream);

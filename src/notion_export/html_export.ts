@@ -10,6 +10,8 @@ import {
 import {
 	downloadFileFromUrl,
 	enqueueExportTask,
+	getFileToken,
+	getSpaceId,
 	getTaskStatus,
 } from "../utils/notion_api_utils";
 
@@ -19,7 +21,9 @@ export const getHtmlExport = async (authToken: string, pageId: string) => {
 	devLogger.info("Starting Html Export Subroutine");
 
 	let taskId: string = "";
-	let res = await enqueueExportTask(authToken, pageId);
+	const spaceId = await getSpaceId(authToken, pageId)
+	const fileToken=await getFileToken(authToken, spaceId)
+	let res = await enqueueExportTask(authToken, pageId, spaceId);
 	taskId = res.taskId;
 	if (!taskId) {
 		throw Error("Something went wrong! Couldn't get the taskId");
@@ -45,7 +49,7 @@ export const getHtmlExport = async (authToken: string, pageId: string) => {
 
 	devLogger.info("Got the S3 download URL");
 
-	await downloadFileFromUrl(tmpDownloadZipFileFromNotionPath, downloadUrl);
+	await downloadFileFromUrl(tmpDownloadZipFileFromNotionPath, downloadUrl, fileToken);
 
 	// remove all files in [inputFileDirPath] folder
 	clearDirectoryAndKeepDotFiles(inputFileDirPath);
