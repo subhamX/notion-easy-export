@@ -18,7 +18,26 @@ export const getTaskStatus = async (token_v2: string, taskId: string) => {
 	return json;
 };
 
-export const enqueueExportTask = async (token_v2: string, pageId: string) => {
+
+export const getSpaceId = async (token_v2: string, blockId: string) => {
+	const res = await fetch("https://www.notion.so/api/v3/getPublicPageData", {
+		headers: {
+			"content-type": "application/json",
+			cookie: `token_v2=${token_v2};`,
+		},
+		body: JSON.stringify({
+			blockId,
+		}),
+		method: "POST",
+	});
+	const json = await res.json();
+
+	return json['spaceId'];
+};
+
+export const enqueueExportTask = async (token_v2: string, blockId: string) => {
+	const spaceId=await getSpaceId(token_v2, blockId)
+
 	const res = await fetch("https://www.notion.so/api/v3/enqueueTask", {
 		headers: {
 			"content-type": "application/json",
@@ -28,7 +47,10 @@ export const enqueueExportTask = async (token_v2: string, pageId: string) => {
 			task: {
 				eventName: "exportBlock",
 				request: {
-					blockId: pageId,
+					block: {
+						blockId,
+						spaceId,
+					},
 					recursive: true,
 					exportOptions: {
 						exportType: "html",
