@@ -29,7 +29,9 @@ export const buildCurrentSession = async (token_v2: string, pageId: string) => {
 			4
 		)}-${pageId.substr(16, 4)}-${pageId.substr(20)}`;
 	} else if (pageId.length !== 36) {
-		`pageId size ${pageId.length} isn't valid. Please note that the following doc https://www.notion.so/Getting-Started-53da8784dac74d4185f5d11bafddac97 id is 53da8784dac74d4185f5d11bafddac97. (i.e. excluding Getting-Started-)`;
+		throw Error(
+			`pageId size ${pageId.length} isn't valid. Please note that the following doc https://www.notion.so/Getting-Started-53da8784dac74d4185f5d11bafddac97 id is 53da8784dac74d4185f5d11bafddac97. (i.e. excluding Getting-Started-)`
+		);
 	}
 
 	buildSessionDirs();
