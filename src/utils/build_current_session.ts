@@ -14,7 +14,7 @@ export const buildCurrentSession = async (token_v2: string, pageId: string) => {
 
 	if (!checkIfBinaryIsInPathExists("wkhtmltopdf")) {
 		throw Error(
-			`wkhtmltopdf isn't installed or not in PATH. Kindly visit https://github.com/subhamX/notion-to-ebook#installing-wkhtmltopdf to fix this issue`
+			`wkhtmltopdf isn't installed or not in PATH. Kindly visit https://github.com/subhamX/notion-to-ebook#required-installing-wkhtmltopdf to fix this issue`
 		);
 	} else {
 		devLogger.info("wkhtmltopdf is installed and in PATH. 🥳🥳");
