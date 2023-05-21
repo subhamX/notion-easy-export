@@ -1,25 +1,25 @@
-# Notion to Ebook
+# Notion Easy Export
 
 <p align="center">
   <a
-    href="https://github.com/subhamx/notion-to-ebook/blob/master/LICENSE"
+    href="https://github.com/subhamx/notion-easy-export/blob/master/LICENSE"
     style="margin-right: 1em;">
-    <img alt="Apache-2.0" src="https://img.shields.io/github/license/subhamx/notion-to-ebook?color=blue"/>
+    <img alt="Apache-2.0" src="https://img.shields.io/github/license/subhamx/notion-easy-export?color=blue"/>
   </a>
   <a
-    href="https://www.npmjs.com/package/@subhamx/notion-to-ebook"
+    href="https://www.npmjs.com/package/notion-easy-export"
     style="margin-right: 1em;">
-    <img alt="NPM Package Link" src="https://img.shields.io/npm/v/@subhamx/notion-to-ebook?color=brightgreen"/>
+    <img alt="NPM Package Link" src="https://img.shields.io/npm/v/notion-easy-export?color=brightgreen"/>
   </a>
 </p>
 
-Notion to Ebook is a lightweight library written in Typescript to convert any notion document consisting of multiple nested documents or databases into an ebook format like PDFs, with the table of contents, page cover, headers etc.
+Notion easy export is a lightweight library written in Typescript to convert any notion document consisting of multiple nested documents or databases into an ebook format like PDFs, with the table of contents, page cover, headers etc.
 
 ## Use Cases
 
 1. Say you have a notion database containing many documents, and you wish to export them into a single PDF. Notion doesn't allow non-enterprise uses to include all the subpages into a single PDF recursively (Have a look at image below). But this library lets you generate it without any hassle, and even on a free plan. :)
-   ![PDF Export Dialog](https://raw.githubusercontent.com/subhamx/notion-to-ebook/HEAD/_docs/4.png)
-2. Say you have an e-reader like Kindle would like to send all the articles you have written on Notion workspace every 24 hours automatically. **Notion to Ebook** can help you in it. You can use it to get the Ebook version, then can send it to your e-reader device. :). You may consider using GitHub actions or any similar service to automate the workflow.
+   ![PDF Export Dialog](https://raw.githubusercontent.com/subhamx/notion-easy-export/HEAD/_docs/4.png)
+2. Say you have an e-reader like Kindle would like to send all the articles you have written on Notion workspace every 24 hours automatically. **Notion easy export** can help you in it. You can use it to get the Ebook version, then can send it to your e-reader device. :). You may consider using GitHub actions or any similar service to automate the workflow.
 
 ## Features
 
@@ -36,7 +36,7 @@ There are two modes to use this application:
 ## Installation
 
 ```bash
-npm install @subhamx/notion-to-ebook
+npm install notion-easy-export
 ```
 
 ### [Required] Installing wkhtmltopdf
@@ -62,7 +62,7 @@ The usage is pretty straightforward.
 1. If you want to use in the **standalone mode** and generate separate PDF document for each one Notion Page.
 
 ```javascript
-import { buildStandaloneDocs } from "@subhamx/notion-to-ebook";
+import { buildStandaloneDocs } from "notion-easy-export";
 
 const token_v2 = "YOUR_NOTION_TOKEN_V2";
 const pageId = "NOTION_PAGE_ID";
@@ -73,7 +73,7 @@ buildStandaloneDocs(token_v2, pageId);
 2. If you want to use in the **merged mode** and generate a single PDF document for each the complete export.
 
 ```javascript
-import { buildMergedDoc } from "@subhamx/notion-to-ebook";
+import { buildMergedDoc } from "notion-easy-export";
 
 const token_v2 = "YOUR_NOTION_TOKEN_V2";
 const pageId = "NOTION_PAGE_ID";
@@ -100,8 +100,8 @@ We will export [this](https://bx.notion.site/920be5e64bd04f34b3c4450ad3fcc80e?v=
 
 ### Links to the output files generated using this library:
 
-1. Standalone files: [Link](https://github.com/subhamX/notion-to-ebook/tree/master/_docs/sample_output/standalone)
-2. Merged file: [Link](https://github.com/subhamX/notion-to-ebook/tree/master/_docs/sample_output/merged)
+1. Standalone files: [Link](https://github.com/subhamX/notion-easy-export/tree/master/_docs/sample_output/standalone)
+2. Merged file: [Link](https://github.com/subhamX/notion-easy-export/tree/master/_docs/sample_output/merged)
 
 It's Great, isn't it? 🎉
 
