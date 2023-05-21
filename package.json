@@ -1,6 +1,6 @@
 {
 	"name": "notion-easy-export",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Notion easy export is a lightweight library to convert notion document consisting of multiple nested documents or databases into an ebook format like PDFs, with the table of contents, page cover, headers etc.",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
@@ -29,6 +29,7 @@
 		"extract-zip": "^2.0.1",
 		"fs-extra": "^10.0.0",
 		"node-fetch": "^2.6.1",
+		"notion-easy-export": "^1.0.0",
 		"winston": "^3.3.3"
 	},
 	"devDependencies": {
