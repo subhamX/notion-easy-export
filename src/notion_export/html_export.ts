@@ -22,7 +22,7 @@ export const getHtmlExport = async (authToken: string, pageId: string) => {
 
 	let taskId: string = "";
 	const spaceId = await getSpaceId(authToken, pageId)
-	const fileToken=await getFileToken(authToken, spaceId)
+	const fileToken=await getFileToken(authToken)
 	let res = await enqueueExportTask(authToken, pageId, spaceId);
 	taskId = res.taskId;
 	if (!taskId) {
