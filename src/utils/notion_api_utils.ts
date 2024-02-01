@@ -1,6 +1,7 @@
 import { createWriteStream } from "fs";
 import devLogger from "../logger/dev_logger";
 import fetch from "node-fetch";
+import { exit } from "process";
 
 export const getTaskStatus = async (token_v2: string, taskId: string) => {
 	const res = await fetch("https://www.notion.so/api/v3/getTasks", {
@@ -36,18 +37,24 @@ export const getSpaceId = async (token_v2: string, blockId: string) => {
 };
 
 
-export const getFileToken = async (token_v2: string, spaceId: string) => {
-	const res = await fetch("https://www.notion.so/api/v3/getAIUsageEligibility", {
+export const getFileToken = async (token_v2: string) => {
+	const res = await fetch("https://www.notion.so/f/refresh", {
 		"headers": {
-			"content-type": "application/json",
-			cookie: `token_v2=${token_v2};`,
+			"cookie": `token_v2=${token_v2};`,
 		},
-		"body": JSON.stringify({
-			spaceId
-		}),
-		"method": "POST",
+		"method": "GET"
 	});
-	const fileToken=res.headers.get('set-cookie')?.split(', ').filter(e => e.includes('file_token='))[0].split('; ')[0].split('=')[1]
+	let fileToken = ''
+	try{
+		fileToken = res.headers.get('set-cookie')?.split(', ').filter(e => e.includes('file_token='))[0].split('; ')[0].split('=')[1] ?? ""
+	}catch(e){
+		if(e.message.includes('Cannot read properties of undefined (reading \'split\')')){
+			devLogger.error('Invalid token_v2. Did you logout the session using this token_v2? Kindly login in an incognito window, get the token_v2, and close the window instead of logging out.')
+			exit(1)
+		}else{
+			throw e
+		}
+	}
 	return fileToken as string;
 }
 
